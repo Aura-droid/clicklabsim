@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Click Lab Simulator — IIT Madras</title>
+<meta name="description" content="Click Lab Simulator: interactive CuAAC/SPAAC reaction lab, bio-orthogonal cell sandbox, and ML model evaluator. Built by IIT Madras students.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129514;</text></svg>">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true">
+        <circle cx="24" cy="24" r="21" fill="none" stroke="var(--accent)" stroke-width="2.2"/>
+        <circle cx="16" cy="20" r="4.2" fill="var(--accent)"/>
+        <circle cx="32" cy="20" r="4.2" fill="var(--accent-2)"/>
+        <path d="M20 21 L28 21" stroke="#e2f7ff" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M17 25 L17 32 M31 25 L31 32" stroke="#e2f7ff" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="17" cy="35" r="2.6" fill="#7ef7d4"/>
+        <circle cx="31" cy="35" r="2.6" fill="#c4a7ff"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <h1>CLICK LAB <span>SIMULATOR</span></h1>
+      <p>CuAAC &amp; SPAAC Reaction Intelligence &middot; IIT Madras</p>
+    </div>
+  </div>
+
+  <nav class="screen-nav" aria-label="App screens">
+    <button class="nav-btn active" data-screen="lab">
+      <span class="nav-num">01</span>
+      <span class="nav-label">Reaction Discovery Lab</span>
+    </button>
+    <button class="nav-btn" data-screen="sandbox">
+      <span class="nav-num">02</span>
+      <span class="nav-label">Bio-Orthogonal Sandbox</span>
+    </button>
+    <button class="nav-btn" data-screen="explorer">
+      <span class="nav-num">03</span>
+      <span class="nav-label">Data Explorer &amp; Model Evaluator</span>
+    </button>
+  </nav>
+</header>
+
+<div class="team-bar">
+  <img class="team-logo" src="assets/iitmlogo.png" alt="IIT Madras crest">
+  <span class="team-tag">IIT MADRAS</span>
+  <span class="team-names">Developed by <strong>Fredrick</strong>, <strong>Fatma</strong>, <strong>Vishal</strong>, <strong>Abiud</strong>, <strong>Anwar</strong> &amp; <strong>Nabeel</strong></span>
+</div>
+
+<main>
+
+<!-- ══════════════ SCREEN 1 · REACTION DISCOVERY LAB ══════════════ -->
+<section id="screen-lab" class="screen active">
+  <div class="screen-intro">
+    <h2><span class="step-badge">Screen 01</span> Reaction Discovery Lab</h2>
+    <p>Adjust the parameters of a <strong>CuAAC</strong> or <strong>SPAAC</strong> click reaction, visualise the molecules in 2D &amp; 3D, then run the in-browser prediction model to estimate the reaction yield — with an AI-written lab note explaining the result.</p>
+  </div>
+
+  <div class="lab-grid">
+
+    <div class="panel controls-panel">
+      <h3 class="panel-title">Reaction Parameters</h3>
+
+      <div class="control-group">
+        <label class="control-label">Reaction Type</label>
+        <div class="reaction-type-cards">
+          <button class="rxn-card active" data-rxn="cuaac">
+            <span class="rxn-name">CuAAC</span>
+            <span class="rxn-desc">Cu(I)-catalysed<br>azide–alkyne cycloaddition</span>
+          </button>
+          <button class="rxn-card" data-rxn="spaac">
+            <span class="rxn-name">SPAAC</span>
+            <span class="rxn-desc">Strain-promoted<br>(copper-free)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="in-temp">Temperature <output id="out-temp" class="mono">40 °C</output></label>
+        <input type="range" id="in-temp" min="20" max="100" value="40" step="1">
+        <div class="range-ends mono"><span>20 °C</span><span>100 °C</span></div>
+      </div>
+
+      <div class="control-group" id="cat-group">
+        <label class="control-label" for="in-cat">Catalyst loading <output id="out-cat" class="mono">3.0 mol%</output></label>
+        <input type="range" id="in-cat" min="0" max="10" value="3" step="0.1">
+        <div class="range-ends mono"><span>0</span><span>10 mol% CuI</span></div>
+        <p class="control-hint" id="cat-hint">CuAAC needs a Cu(I) catalyst (e.g. CuI with ligand).</p>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="in-solvent">Solvent</label>
+        <select id="in-solvent"></select>
+        <p class="control-hint" id="solvent-hint"></p>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="in-conc">Concentration <output id="out-conc" class="mono">0.30 M</output></label>
+        <input type="range" id="in-conc" min="0.05" max="1" value="0.3" step="0.05">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="in-time">Reaction time <output id="out-time" class="mono">12 h</output></label>
+        <input type="range" id="in-time" min="2" max="48" value="12" step="1">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Substrates <span class="label-sub">(edit SMILES or pick a preset)</span></label>
+        <div class="preset-row" id="preset-row"></div>
+        <label class="smiles-label" for="in-azide">Azide SMILES</label>
+        <input type="text" id="in-azide" class="mono" spellcheck="false">
+        <label class="smiles-label" for="in-alkyne">Alkyne SMILES</label>
+        <input type="text" id="in-alkyne" class="mono" spellcheck="false">
+      </div>
+
+      <button id="btn-run" class="btn-primary btn-run">
+        <span class="btn-glyph">&#9654;</span> Run AI Prediction Model
+      </button>
+      <div id="run-status" class="run-status" aria-live="polite"></div>
+    </div>
+
+    <div class="panel results-panel">
+      <h3 class="panel-title">Prediction Output</h3>
+
+      <div class="yield-card" id="yield-card">
+        <div class="yield-value mono" id="yield-value">—</div>
+        <div class="yield-meta">
+          <div class="yield-label">Predicted Yield</div>
+          <div class="yield-bar"><div class="yield-bar-fill" id="yield-bar-fill"></div></div>
+          <div class="yield-sub mono" id="yield-confidence">awaiting run&hellip;</div>
+        </div>
+      </div>
+
+      <div class="viewer-tabs" id="mol-tabs" role="tablist">
+        <button class="mol-tab active" data-mol="azide">Azide</button>
+        <button class="mol-tab" data-mol="alkyne">Alkyne</button>
+        <button class="mol-tab" data-mol="product">Product</button>
+      </div>
+
+      <div class="viewers-row">
+        <div class="viewer-box">
+          <div class="viewer-head mono">2D STRUCTURE · RDKit.js</div>
+          <div id="viewer-2d" class="viewer-body viewer-2d"></div>
+        </div>
+        <div class="viewer-box">
+          <div class="viewer-head mono">3D CONFORMER · 3Dmol.js <span class="viewer-hint">drag to rotate · scroll to zoom</span></div>
+          <div id="viewer-3d" class="viewer-body viewer-3d"></div>
+        </div>
+      </div>
+
+      <div class="assistant-note" id="assistant-note">
+        <div class="assistant-head">
+          <span class="assistant-orb"></span>
+          <span class="assistant-title">Lab Assistant Note</span>
+          <span class="assistant-src mono" id="assistant-src"></span>
+        </div>
+        <p id="assistant-text">Run the prediction model to receive an explanation of the predicted yield and how to optimise it.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════ SCREEN 2 · BIO-ORTHOGONAL SANDBOX ══════════════ -->
+<section id="screen-sandbox" class="screen">
+  <div class="screen-intro">
+    <h2><span class="step-badge">Screen 02</span> Bio-Orthogonal Cellular Sandbox</h2>
+    <p>Why did click chemistry win the <strong>2022 Nobel Prize</strong>? Inject fluorescent SPAAC probes into a living cell and watch them ignore every native protein — and click <em>only</em> onto the azide-tagged target.</p>
+  </div>
+
+  <div class="sandbox-grid">
+    <div class="panel sandbox-panel">
+      <div class="sandbox-toolbar">
+        <button id="btn-inject" class="btn-primary">Inject Probe</button>
+        <button id="btn-reset-cell" class="btn-ghost">Reset Cell</button>
+        <div class="sandbox-stat mono">probes bound: <span id="bound-count">0</span> / <span id="probe-total">0</span></div>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="cell-canvas" width="960" height="600"></canvas>
+      </div>
+      <div class="sandbox-status mono" id="sandbox-status">Cell at rest · target protein carries an azide (N₃) handle</div>
+    </div>
+
+    <div class="panel sandbox-info">
+      <h3 class="panel-title">What you are seeing</h3>
+      <ul class="legend-list">
+        <li><span class="dot dot-membrane"></span><div><strong>Cell membrane</strong><br>the probe must diffuse across it</div></li>
+        <li><span class="dot dot-protein"></span><div><strong>Native proteins</strong><br>drifting gray particles — thousands of wrong partners</div></li>
+        <li><span class="dot dot-target"></span><div><strong>Target protein</strong><br>tagged with a bio-orthogonal azide handle</div></li>
+        <li><span class="dot dot-probe"></span><div><strong>DBCO–fluorophore probe</strong><br>glows cyan; reacts only with azides via SPAAC</div></li>
+      </ul>
+      <h3 class="panel-title mt">Why it matters</h3>
+      <p class="info-copy">CuAAC and SPAAC are <strong>bio-orthogonal</strong>: they proceed inside living systems without disturbing native biochemistry. The strained cyclooctyne (DBCO) reacts with azides faster than any biological functional group can — no copper, no toxicity — which is exactly why this chemistry earned Sharpless, Meldal &amp; Bertozzi the 2022 Nobel Prize in Chemistry.</p>
+      <p class="info-copy">Every gray particle the probe drifts past without reacting is a demonstration of <strong>selectivity</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCREEN 3 · DATA EXPLORER ══════════════ -->
+<section id="screen-explorer" class="screen">
+  <div class="screen-intro">
+    <h2><span class="step-badge">Screen 03</span> Data Explorer &amp; Model Evaluator</h2>
+    <p>The yield predictor is not a black box. Inspect the evaluation set, the error metrics, and which features the model actually relies on.</p>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-card"><div class="metric-value mono" id="metric-r2">—</div><div class="metric-label">R² (test set)</div></div>
+    <div class="metric-card"><div class="metric-value mono" id="metric-mae">—</div><div class="metric-label">MAE (yield pts)</div></div>
+    <div class="metric-card"><div class="metric-value mono" id="metric-rmse">—</div><div class="metric-label">RMSE (yield pts)</div></div>
+    <div class="metric-card"><div class="metric-value mono" id="metric-n">—</div><div class="metric-label">Dataset size</div></div>
+  </div>
+
+  <div class="explorer-grid">
+    <div class="panel chart-panel">
+      <h3 class="panel-title">Predicted vs Observed Yield <span class="panel-sub">test set · dashed line = perfect prediction</span></h3>
+      <div class="chart-wrap"><canvas id="chart-scatter"></canvas></div>
+    </div>
+
+    <div class="panel chart-panel">
+      <h3 class="panel-title">Residual Distribution <span class="panel-sub">observed − predicted</span></h3>
+      <div class="chart-wrap"><canvas id="chart-residual"></canvas></div>
+    </div>
+
+    <div class="panel chart-panel chart-wide">
+      <h3 class="panel-title">Feature Importance <span class="panel-sub">|standardised ridge coefficients|</span></h3>
+      <div class="chart-wrap chart-wrap-tall"><canvas id="chart-importance"></canvas></div>
+    </div>
+
+    <div class="panel interpret-panel">
+      <h3 class="panel-title">Model Card</h3>
+      <div id="model-card-body" class="model-card-body">Fitting&hellip;</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-title">CLICK LAB SIMULATOR</div>
+      <div class="footer-copy">An interactive click-chemistry &amp; machine-learning teaching platform.</div>
+    </div>
+    <div class="footer-team">
+      <div class="footer-title">Development Team · IIT Madras</div>
+      <div class="footer-names">Fredrick &middot; Fatma &middot; Vishal &middot; Abiud &middot; Anwar &middot; Nabeel</div>
+    </div>
+    <img class="footer-logo" src="assets/iitmlogo.png" alt="IIT Madras crest">
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/model.js"></script>
+<script src="js/lab.js"></script>
+<script src="js/sandbox.js"></script>
+<script src="js/explorer.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
