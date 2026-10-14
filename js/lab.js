@@ -297,7 +297,11 @@ ClickLab.lab = (() => {
       });
       if (!res.ok) throw new Error(`worker ${res.status}`);
       const data = await res.json();
-      if (data.text) setAssistantNote(data.text, 'Gemini · Worker');
+      if (data.text) {
+        setAssistantNote(data.text, 'Gemini · Worker');
+      } else {
+        setAssistantNote(ClickLab.model.localExplanation(params), 'local model (Gemini returned no text)');
+      }
     } catch (e) {
       setAssistantNote(ClickLab.model.localExplanation(params), 'local model (Gemini unreachable)');
     }
