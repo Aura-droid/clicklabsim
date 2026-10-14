@@ -2,7 +2,7 @@ window.ClickLab = window.ClickLab || {};
 
 ClickLab.lab = (() => {
 
-  const WORKER_URL = '';
+  const WORKER_URL = 'https://clicklab-gemini-proxy.zcp26b002.workers.dev/';
 
   const state = {
     rxnType: 'cuaac',
@@ -18,7 +18,7 @@ ClickLab.lab = (() => {
 
   function currentPreset() {
     return ClickLab.data.PRESETS.find(p => p.id === state.presetId) ||
-           ClickLab.data.PRESETS.find(p => p.rxn === state.rxnType);
+      ClickLab.data.PRESETS.find(p => p.rxn === state.rxnType);
   }
 
   function currentSmiles(molKey) {
