@@ -2,7 +2,7 @@
 
 An interactive click-chemistry + machine-learning teaching platform, built as a fully client-side web app.
 
-> **Developed by IIT Madras students:** Fredrick, Fatma, Vishal, Abiud, Anwar & Nabeel
+> **Developed by IIT Madras students:** Fredrick, Fatma, Vishal, Abiud, Anwar, Nabeel & Suleiman
 
 ## Screens
 
@@ -72,4 +72,4 @@ The worker (`worker/worker.js`) validates the request, injects the key server-si
 
 ## Team
 
-**Click Lab Simulator** — Fredrick · Fatma · Vishal · Abiud · Anwar · Nabeel — Indian Institute of Technology Madras.
+**Click Lab Simulator** — Fredrick · Fatma · Vishal · Abiud · Anwar · Nabeel · Suleiman — Indian Institute of Technology Madras.
